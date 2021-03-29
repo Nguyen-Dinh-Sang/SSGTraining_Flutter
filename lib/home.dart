@@ -1,49 +1,63 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_exercise/Product.dart';
-import 'package:flutter_exercise/main.dart';
+import 'package:flutter_exercise/ProductBloc.dart';
+import 'package:flutter_exercise/ProductEvent.dart';
+import 'package:flutter_exercise/ProductState.dart';
 
 class HomePage extends StatelessWidget {
-  TextEditingController searchController = new TextEditingController();
-  List<Product> product = <Product>[
-    new Product('Dell E6530', 'Laptop', 10),
-    new Product('Dell Gaming', 'Laptop', 12),
-    new Product('Macbook M1', 'Laptop', 1),
-    new Product('Samsung', 'SSD', 100),
-    new Product('ADATA', 'SSD', 310),
-    new Product('Kington', 'SSD', 103),
-    new Product('Honda', 'Motor', 102),
-    new Product('Yamaha', 'Motor', 101),
-    new Product('Suzuki', 'Motor', 130),
-    new Product('HP', 'Laptop', 18),
-    new Product('Thinkpad', 'Laptop', 198)
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Product'),
-        ),
-      body: Column(
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-            child: TextField(
-              controller: searchController,
-              decoration: InputDecoration(
-                labelText: 'Search',
-                prefixIcon: Icon(Icons.search)
-              ),
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(itemBuilder: (context, index) {
-              return buildListTile(product[index], index);
-            }),
-          )
-        ],
+      appBar: AppBar(
+        title: Text('Product'),
       ),
+      body: SearchProduct(),
     );
+  }
+}
+
+class SearchProduct extends StatefulWidget {
+  @override
+  _SearchProductState createState() => _SearchProductState();
+}
+
+class _SearchProductState extends State<SearchProduct> {
+  final bloc = ProductBloc();
+  TextEditingController searchController = new TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    searchController.addListener(() {
+      bloc.eventController.sink.add(SearchEvent(searchController.text));
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    bloc.eventController.sink.add(SearchEvent(''));
+    return StreamBuilder<ProductState>(
+        stream: bloc.stateController.stream,
+        initialData: bloc.state,
+        builder: (BuildContext context, AsyncSnapshot<ProductState> snapshot) {
+          return Column(
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                child: TextField(
+                  controller: searchController,
+                  decoration: InputDecoration(
+                      labelText: 'Search', prefixIcon: Icon(Icons.search)),
+                ),
+              ),
+              Expanded(
+                child: ListView.builder(itemBuilder: (context, index) {
+                  return buildListTile(snapshot.data.product[index], index);
+                }),
+              )
+            ],
+          );
+        });
   }
 
   ListTile buildListTile(Product product, int index) {
@@ -86,19 +100,6 @@ class HomePage extends StatelessWidget {
           ),
         ),
       ),
-      );
-  }
-}
-class SearchProduct extends StatefulWidget {
-  @override
-  _SearchProductState createState() => _SearchProductState();
-}
-
-class _SearchProductState extends State<SearchProduct> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-
     );
   }
 }

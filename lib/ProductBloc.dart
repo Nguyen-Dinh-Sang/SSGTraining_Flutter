@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter_exercise/Product.dart';
 import 'package:flutter_exercise/ProductEvent.dart';
@@ -28,8 +29,21 @@ class ProductBloc {
   ProductBloc() {
     eventController.stream.listen((event) {
       if (event is SearchEvent) {
-        String key = event.key;
-        state = ProductState(product);
+        String key = event.key.toLowerCase().trim();
+        List<Product> filterList = <Product>[];
+        log(key);
+
+        if (key == null || key.length == 0) {
+          filterList.addAll(product);
+        } else {
+          product.forEach((element) {
+            if (element.productName.toLowerCase().contains(key)) {
+              filterList.add(element);
+            }
+          });
+        }
+
+        state = ProductState(filterList);
         stateController.sink.add(state);
       }
     });
