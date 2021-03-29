@@ -141,6 +141,9 @@ class _MyLoginState extends State<MyLogin> {
       bloc.eventController.sink
           .add(LoginEvent(_userNameController.text, _passwordController.text));
       log('click' + _userNameController.text + "-" + _passwordController.text);
+      if (bloc.state.userNameInvalid && bloc.state.passwordInvalid) {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+      }
     });
   }
 

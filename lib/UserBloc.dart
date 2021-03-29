@@ -15,13 +15,8 @@ class UserBloc {
   // trả dữ liệu cho UI
   final stateController = StreamController<UserState>();
 
-  final transformer = StreamTransformer<String, String>.fromHandlers(handleData: (String data, sink) {
-    data += '-data-plus';
-    sink.add(data);
-  });
-
   UserBloc() {
-    eventController.stream.listen((UserEvent event) {
+    eventController.stream.listen((event) {
       log('bloc listen');
       if (event is LoginEvent) {
         log('bloc login event');
