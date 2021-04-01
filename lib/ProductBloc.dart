@@ -30,22 +30,31 @@ class ProductBloc {
     eventController.stream.listen((event) {
       if (event is SearchEvent) {
         String key = event.key.toLowerCase().trim();
-        List<Product> filterList = <Product>[];
-        log(key);
 
-        if (key == null || key.length == 0) {
-          filterList.addAll(product);
-        } else {
-          product.forEach((element) {
-            if (element.productName.toLowerCase().contains(key)) {
-              filterList.add(element);
-            }
-          });
-        }
-
-        state = ProductState(filterList);
-        stateController.sink.add(state);
+        searchData(key).then((value) {
+          state = ProductState(value);
+          stateController.sink.add(state);
+        });
       }
     });
+  }
+
+  Future<List<Product>> searchData(String key) async {
+    List<Product> filterList = <Product>[];
+    log(key);
+
+    await Future.delayed(Duration(seconds: 5), () => log('wait 5s'));
+
+    if (key == null || key.length == 0) {
+      filterList.addAll(product);
+    } else {
+      product.forEach((element) {
+        if (element.productName.toLowerCase().contains(key)) {
+          filterList.add(element);
+        }
+      });
+    }
+
+    return filterList;
   }
 }

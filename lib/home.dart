@@ -51,9 +51,14 @@ class _SearchProductState extends State<SearchProduct> {
                 ),
               ),
               Expanded(
-                child: ListView.builder(itemBuilder: (context, index) {
-                  return buildListTile(snapshot.data.product[index], index);
-                }),
+                child: (snapshot.data == null
+                    ? new Container()
+                    : ListView.builder(
+                        itemCount: snapshot.data.product.length,
+                        itemBuilder: (context, index) {
+                          return buildListTile(
+                              snapshot.data.product[index], index);
+                        })),
               )
             ],
           );
