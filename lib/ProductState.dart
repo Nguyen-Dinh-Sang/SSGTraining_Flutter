@@ -1,4 +1,5 @@
-import 'package:flutter_exercise/Product.dart';
+
+import 'Product.dart';
 
 class ProductState {
   final List<Product> product;

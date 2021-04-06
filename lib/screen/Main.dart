@@ -1,10 +1,10 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_exercise/UserBloc.dart';
-import 'package:flutter_exercise/UserEvent.dart';
-import 'package:flutter_exercise/UserState.dart';
-import 'package:flutter_exercise/home.dart';
+import 'package:flutter_provider/UserBloc.dart';
+import 'package:flutter_provider/UserState.dart';
+import 'package:flutter_provider/event/UserEvent.dart';
+import 'Home.dart';
 
 void main() {
   runApp(MyApp());

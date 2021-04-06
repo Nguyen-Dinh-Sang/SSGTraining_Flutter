@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_exercise/Product.dart';
-import 'package:flutter_exercise/ProductBloc.dart';
-import 'package:flutter_exercise/ProductEvent.dart';
-import 'package:flutter_exercise/ProductState.dart';
+import 'package:flutter_provider/event/ProductEvent.dart';
+import 'package:provider/provider.dart';
+
+import '../Product.dart';
+import '../ProductBloc.dart';
+import '../ProductState.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -33,14 +35,17 @@ class _SearchProductState extends State<SearchProduct> {
     });
   }
 
+  Stream<ProductState> getStream() {
+    return bloc.stateController.stream;
+  }
+
   @override
   Widget build(BuildContext context) {
     bloc.eventController.sink.add(SearchEvent(''));
-    return StreamBuilder<ProductState>(
-        stream: bloc.stateController.stream,
-        initialData: bloc.state,
-        builder: (BuildContext context, AsyncSnapshot<ProductState> snapshot) {
-          return Column(
+    return StreamProvider<ProductState>.value(
+        value: getStream(),
+        initialData: null,
+        child: Column(
             children: <Widget>[
               Padding(
                 padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
@@ -51,18 +56,18 @@ class _SearchProductState extends State<SearchProduct> {
                 ),
               ),
               Expanded(
-                child: (snapshot.data == null
-                    ? new Container()
-                    : ListView.builder(
-                        itemCount: snapshot.data.product.length,
-                        itemBuilder: (context, index) {
-                          return buildListTile(
-                              snapshot.data.product[index], index);
-                        })),
+                child: Consumer<ProductState>(
+                    builder: (context, value, child) {
+                      return value.product == null ? new Container() : ListView
+                          .builder(itemCount: value.product.length,
+                          itemBuilder: (context, index) {
+                            return buildListTile(value.product[index], index);
+                          });
+                    }
+                ),
               )
-            ],
-          );
-        });
+            ]
+        ));
   }
 
   ListTile buildListTile(Product product, int index) {

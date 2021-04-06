@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'dart:developer';
+import 'package:flutter_provider/event/ProductEvent.dart';
 
-import 'package:flutter_exercise/Product.dart';
-import 'package:flutter_exercise/ProductEvent.dart';
-import 'package:flutter_exercise/ProductState.dart';
+import 'Base/BaseEvent.dart';
+import 'Product.dart';
+import 'ProductState.dart';
 
 class ProductBloc {
   List<Product> product = <Product>[
@@ -22,7 +23,7 @@ class ProductBloc {
 
   ProductState state;
 
-  final eventController = StreamController<ProductEvent>();
+  final eventController = StreamController<BaseEvent>();
 
   final stateController = StreamController<ProductState>();
 
@@ -43,7 +44,7 @@ class ProductBloc {
     List<Product> filterList = <Product>[];
     log(key);
 
-    await Future.delayed(Duration(seconds: 5), () => log('wait 5s'));
+    // await Future.delayed(Duration(seconds: 5), () => log('wait 5s'));
 
     if (key == null || key.length == 0) {
       filterList.addAll(product);

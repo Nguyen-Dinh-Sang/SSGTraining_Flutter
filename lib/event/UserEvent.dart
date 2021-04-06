@@ -1,8 +1,7 @@
 import 'dart:developer';
+import 'package:flutter_provider/Base/BaseEvent.dart';
 
-abstract class UserEvent {}
-
-class LoginEvent extends UserEvent {
+class LoginEvent extends BaseEvent {
   final String userName;
   final String password;
 
@@ -12,7 +11,7 @@ class LoginEvent extends UserEvent {
   }
 }
 
-class SignUpEvent extends UserEvent {
+class SignUpEvent extends BaseEvent {
   final String userName;
   final String password;
   final int otpPass;

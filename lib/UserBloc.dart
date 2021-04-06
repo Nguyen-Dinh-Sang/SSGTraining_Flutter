@@ -1,16 +1,16 @@
 import 'dart:async';
 import 'dart:developer';
+import 'package:flutter_provider/event/UserEvent.dart';
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_exercise/UserEvent.dart';
-import 'package:flutter_exercise/UserState.dart';
+import 'Base/BaseEvent.dart';
+import 'UserState.dart';
 
 class UserBloc {
   // mặc địch ban đầu chưa nhập gì nên không hợp lệ.
   UserState state = UserState(false, false);
 
   // nhận dữ liệu từ UI
-  final eventController = StreamController<UserEvent>();
+  final eventController = StreamController<BaseEvent>();
 
   // trả dữ liệu cho UI
   final stateController = StreamController<UserState>();

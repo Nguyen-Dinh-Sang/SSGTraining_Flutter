@@ -1,4 +1,4 @@
-# flutter_exercise
+# flutter_provider
 
 A new Flutter application.
 
